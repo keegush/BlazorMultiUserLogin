@@ -1,0 +1,34 @@
+﻿@inject NavigationManager Navigation // Used for navigating between pages
+
+<!-- Wraps the application in an authentication context so the user's authentication state can be passed down the component tree -->
+<CascadingAuthenticationState>
+    <!-- The Router component handles routing between different pages in the application -->
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <!-- Defines what happens when a matching route is found -->
+        <Found Context="routeData">
+            <!-- The AuthorizeRouteView component ensures that authorization is required for the route -->
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
+                <!-- Displays while the authorization process is happening -->
+                <Authorizing>
+                    <h3>Authorizing...</h3>
+                </Authorizing>
+                <!-- Displays content if the user is not authorized to view the route -->
+                <NotAuthorized>
+                    @if (!context.User.Identity.IsAuthenticated)
+                    {
+                        // If the user is not authenticated, redirect them to the login page
+                        Navigation.NavigateTo("/login", true); // Redirect to the login page
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+
+        <!-- Defines what happens when no matching route is found -->
+        <NotFound>
+            <LayoutView Layout="@typeof(Layout.MainLayout)">
+                <!-- Displays when the requested page cannot be found -->
+                <h3>Sorry, there's nothing at this address.</h3>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

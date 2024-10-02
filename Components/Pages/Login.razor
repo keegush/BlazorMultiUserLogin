@@ -1,0 +1,13 @@
+﻿@page "/login" // This is the login page route
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Identity.Web.UI
+
+<h3>Login</h3>
+
+<!-- Basic instruction for the user to log in -->
+<p>Please log in to access the application.</p>
+
+<!-- Link to trigger the Microsoft Identity login -->
+<a href="/MicrosoftIdentity/Account/SignIn">Log in with Microsoft</a> <!-- Redirects user to Microsoft Identity login -->

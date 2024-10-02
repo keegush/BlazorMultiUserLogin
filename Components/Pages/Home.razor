@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject NavigationManager Navigation // Used for navigation to different routes/pages
+@inject AuthenticationStateProvider AuthenticationStateProvider // Provides information about the user's authentication state
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<!-- Shows content conditionally based on the user's authentication status -->
+<AuthorizeView>
+    <Authorized>
+        <!-- Displays the user's name from claims if authenticated -->
+        @context.User.Claims.FirstOrDefault(x => x.Type.Equals("name"))?.Value!
+    </Authorized>
+</AuthorizeView>
+
+Welcome to your new app.
+
+@code {
+    private System.Security.Claims.ClaimsPrincipal user; // Represents the current user
+
+    // This method is called when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current authentication state (whether the user is logged in or not)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+
+        // Check if the user is not authenticated
+        if (!user.Identity.IsAuthenticated)
+        {
+            // If not authenticated, redirect to the login page
+            Navigation.NavigateTo("/login", true);
+        }
+    }
+}

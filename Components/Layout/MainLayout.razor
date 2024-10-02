@@ -1,0 +1,44 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager // Allows navigation between pages
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+
+<div class="page">
+    <div class="sidebar">
+        <!-- Renders the navigation menu -->
+        <NavMenu /> 
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <!-- Displays the Logout button only if the user is authenticated -->
+                    <button @onclick="Logout">Logout</button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+        <article class="content px-4">
+            <!-- Placeholder for page-specific content -->
+            @Body
+        </article>
+    </main>
+</div>
+
+<!-- Error UI displayed when an unhandled error occurs -->
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    // Method to log the user out and redirect to Azure AD logout endpoint
+    private void Logout()
+    {
+        // Redirects to the Microsoft Identity logout URL, forcing a page reload to ensure proper sign-out
+        var logoutUri = "/MicrosoftIdentity/Account/SignOut";
+        NavigationManager.NavigateTo(logoutUri, forceLoad: true);
+    }
+}
